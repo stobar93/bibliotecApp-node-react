@@ -3,13 +3,13 @@ const { conn, Op } = require("../db.js");
 
 const createBook = (req, res, next)=>{
     
-        const {title, author, subject, year, pages} = req.body;
+        const {title, author, subject, year} = req.body;
         
         Book.findOrCreate({
                 where:{title: {
                     [Op.iLike]: title
                 }},
-                defaults: {title, author, subject, year, pages}
+                defaults: {title, author, subject, year}
             }).then((data)=>{
                 const [book, createdBook] = data;
                 
