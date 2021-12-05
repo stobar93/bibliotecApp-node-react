@@ -14,11 +14,11 @@ module.exports = (sequelize)=>{
         },
         limitDate: {
             type: DataTypes.VIRTUAL,
-            set() {
-                const createdAt = this.getDataValue('createdAt');
-                this.setDataValue('limitDate', createdAt + 1296000)
+            get() {
+                const rawValue = this.getDataValue('createdAt');
+                return new Date(new Date(rawValue).getTime() + 1296000000)
             },
             
         }
-    })
+    },{timestamps: true})
 }
