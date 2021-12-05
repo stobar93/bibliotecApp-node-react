@@ -13,6 +13,12 @@ module.exports = (sequelize)=>{
         lastName: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        status: {
+            type: DataTypes.ENUM,
+            values: ["active", "banned"],
+            defaultValue: "active",
+            allowNull: false
         }
     })
 }
