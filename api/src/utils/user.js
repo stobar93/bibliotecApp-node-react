@@ -25,12 +25,30 @@ const readUser = (req, res, next)=>{
     .catch((e)=>next(e))
 }
 
-// updateUserInfo
+const updateUserInfo = (req, res, next)=>{
+    const {id} = req.query;
+    const {firstName, lastName, status} = req.body;
+
+    User.findByPk(id)
+    .then((instance)=> {
+        if(instance){
+            instance.firstName = firstName ?? instance.firstName;
+            instance.lastName = lastName ?? instance.lastName;
+            instance.status = status ?? instance.status;
+        }
+        else {throw new Error(`User id: ${id} not found`)} 
+
+        return instance.save()
+    })
+    .then((updatedInstance)=> res.status(200).send({updatedInstance, message: "Changes saved successfully"}))
+    .catch((e)=>next({status: 400, message: `There was an error (${e.message})`}))
+}
+
 // deleteUser
 
 module.exports = {
     readUser, 
     createUser, 
-    // updateUserInfo, 
+    updateUserInfo, 
     // deleteUser
 }
