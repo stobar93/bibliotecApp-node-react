@@ -3,13 +3,14 @@ const {Sequelize, DataTypes} = require('sequelize');
 module.exports = (sequelize)=>{
     sequelize.define('transaction', {
         id: {
-            type: DataTypes.STRING(20),
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
             primaryKey: true
         },
         status: {
             type: DataTypes.ENUM,
             allowNull: false,
-            values: ["lent", "returned"]
+            values: ["open", "closed"]
         },
         limitDate: {
             type: DataTypes.VIRTUAL,
