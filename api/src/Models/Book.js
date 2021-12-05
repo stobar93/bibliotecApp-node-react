@@ -3,14 +3,17 @@ const { Sequelize, DataTypes} = require('sequelize');
 module.exports = (sequelize) => {
     sequelize.define('book', {
         id: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         title: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            validate: {
+                notEmpty: true
+            }
         },
         author: {
             type: DataTypes.STRING,
@@ -18,36 +21,35 @@ module.exports = (sequelize) => {
         },
         subject: {
             type: DataTypes.ENUM,
-            values: ["Arts & Photography",
-                "Biographies & Memoirs",
-                "Business & Money",
-                "Children's eBooks",
-                "Comics, Manga & Graphic Novels",
-                "Computers & Technology",
-                "Cookbooks, Food & Wine",
-                "Crafts, Hobbies & Home",
-                "Education & Teaching",
-                "Engineering & Transportation",
-                "Foreign Languages",
-                "Health, Fitness & Dieting",
+            values: ["Arts",
+                "Biographies",
+                "Business",
+                "Children's",
+                "Comics",
+                "Computers",
+                "Cookbooks",
+                "Crafts",
+                "Education",
+                "Engineering",
+                "Languages",
+                "Fitness",
                 "History",
-                "Humor & Entertainment",
+                "Humor",
                 "Law",
-                "LGBTQ+ eBooks",
-                "Literature & Fiction",
-                "Medical eBooks",
-                "Mystery, Thriller & Suspense",
+                "LGBTQ+",
+                "Literature",
+                "Medical",
+                "Mystery",
                 "Nonfiction",
-                "Parenting & Relationships",
-                "Politics & Social Sciences",
-                "Reference",
-                "Religion & Spirituality",
+                "Parenting",
+                "Politics",
+                "Religion",
                 "Romance",
-                "Science & Math",
-                "Science Fiction & Fantasy",
+                "Science",
+                "Fiction",
                 "Self-Help",
-                "Sports & Outdoors",
-                "Teen & Young Adult",
+                "Thriller",
+                "Sports",
                 "Travel"],
                 allowNull: false
         },
@@ -59,6 +61,19 @@ module.exports = (sequelize) => {
             type: DataTypes.BOOLEAN,
             defaultValue: true,
             allowNull: false
+        },
+        pages: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         }
-    })
+    },
+    {
+        indexes: [
+          { 
+            unique: true,   
+            name: 'unique_title',  
+            fields: [sequelize.fn('lower', sequelize.col('title'))]   
+          }
+        ]
+      })
 }
