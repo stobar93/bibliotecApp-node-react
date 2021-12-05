@@ -14,7 +14,19 @@ const createBook = (req, res, next)=>{
                 const [book, createdBook] = data;
                 
                 createdBook ? res.status(200).send(book) : next({status:409, message: "The book is already registered. Only one unit of each book is allowed"})
-            }).catch((e)=>{next({...e, message: `There was an error (${e.message}), please try again.`})})   
+            }).catch((e)=>{next({...e, message: `There was an error (${e.message})`})})   
+}
+
+const readBook = (req, res, next)=>{
+    const {id} = req.query;
+
+    id && Book.findByPk(id).then((instance)=>{
+        if(instance) {res.status(200).send(instance)}
+        else {throw new Error(`Book id: ${id} not found`)}
+    }).catch((e)=>next({status: 404, message: `There was an error (${e.message})`}))
+
+    Book.findAll().then((data)=>res.status(200).send(data))
+    .catch((e)=>next(e))
 }
 
 const updateBookAvailability = (req, res, next)=>{
@@ -28,7 +40,7 @@ const updateBookAvailability = (req, res, next)=>{
         return instance.save()
     })
     .then((updatedInstance)=> res.status(200).send({updatedInstance, message: "Changes saved successfully"}))
-    .catch((e)=>next({status: 400, message: `There was an error (${e.message}), please try again.`}))
+    .catch((e)=>next({status: 400, message: `There was an error (${e.message})`}))
 }
 
 const deleteBook = (req, res, next)=>{
@@ -46,7 +58,7 @@ const deleteBook = (req, res, next)=>{
         
     })
     .then((deletedInstance)=> res.status(200).send({deletedInstance, message: "Book removed from library successfully"}))
-    .catch((e)=>next({status: 400, message: `There was an error (${e.message}), please try again.`}))
+    .catch((e)=>next({status: 400, message: `There was an error (${e.message})`}))
 }
 
-module.exports = {createBook, updateBookAvailability, deleteBook}
+module.exports = {createBook, readBook, updateBookAvailability, deleteBook}
