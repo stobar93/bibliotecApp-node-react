@@ -62,9 +62,5 @@ module.exports = (sequelize) => {
             defaultValue: true,
             allowNull: false
         },
-        pages: {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
     })
 }
