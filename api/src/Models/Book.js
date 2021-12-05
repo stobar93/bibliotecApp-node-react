@@ -10,6 +10,7 @@ module.exports = (sequelize) => {
         title: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true
         },
         author: {
             type: DataTypes.STRING,
@@ -56,6 +57,7 @@ module.exports = (sequelize) => {
         },
         available: {
             type: DataTypes.BOOLEAN,
+            defaultValue: true,
             allowNull: false
         }
     })
