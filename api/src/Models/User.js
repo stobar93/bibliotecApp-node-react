@@ -20,5 +20,5 @@ module.exports = (sequelize)=>{
             defaultValue: "active",
             allowNull: false
         }
-    })
+    }, {timestamps: true})
 }
