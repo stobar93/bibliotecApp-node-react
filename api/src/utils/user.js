@@ -44,11 +44,27 @@ const updateUserInfo = (req, res, next)=>{
     .catch((e)=>next({status: 400, message: `There was an error (${e.message})`}))
 }
 
-// deleteUser
+const deleteUser = (req, res, next)=>{
+    const {id} = req.query
+
+    User.findByPk(id)
+    .then((instance)=>{
+        if(instance){
+            let deletedInstance = {...instance.dataValues}
+            instance.destroy()
+            return deletedInstance
+        } else{
+            throw new Error(`User id: ${id} not found`)
+        }
+        
+    })
+    .then((deletedInstance)=> res.status(200).send({deletedInstance, message: "User removed from database successfully"}))
+    .catch((e)=>next({status: 400, message: `There was an error (${e.message})`}))
+}
 
 module.exports = {
     readUser, 
     createUser, 
     updateUserInfo, 
-    // deleteUser
+    deleteUser
 }
