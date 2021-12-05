@@ -29,13 +29,19 @@ const readBook = (req, res, next)=>{
     .catch((e)=>next(e))
 }
 
-const updateBookAvailability = (req, res, next)=>{
-    const {id, available} = req.query
+const updateBook = (req, res, next)=>{
+    const {id} = req.query;
+    const {title, author, subject, year, available} = req.body;
 
     Book.findByPk(id)
     .then((instance)=> {
-        if(instance.available !== eval(available)){instance.available = available}
-        else {throw new Error(`This book's availability status is already ${available}`)} 
+        if(instance){
+            instance.title = title ?? instance.title;
+            instance.author = author ?? instance.author;
+            instance.subject = subject ?? instance.subject;
+            instance.year = year ?? instance.year;
+            instance.available = available ?? instance.available;
+        }
 
         return instance.save()
     })
@@ -61,4 +67,4 @@ const deleteBook = (req, res, next)=>{
     .catch((e)=>next({status: 400, message: `There was an error (${e.message})`}))
 }
 
-module.exports = {createBook, readBook, updateBookAvailability, deleteBook}
+module.exports = {createBook, readBook, updateBook, deleteBook}
