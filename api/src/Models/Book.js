@@ -65,15 +65,6 @@ module.exports = (sequelize) => {
         pages: {
             type: DataTypes.INTEGER,
             allowNull: false
-        }
-    },
-    {
-        indexes: [
-          { 
-            unique: true,   
-            name: 'unique_title',  
-            fields: [sequelize.fn('lower', sequelize.col('title'))]   
-          }
-        ]
-      })
+        },
+    })
 }
