@@ -20,11 +20,11 @@ const createBook = (req, res, next)=>{
 const readBook = (req, res, next)=>{
     const {id} = req.query;
 
-    id && Book.findByPk(id).then((instance)=>{
+    id ? Book.findByPk(id).then((instance)=>{
         if(instance) {res.status(200).send(instance)}
         else {throw new Error(`Book id: ${id} not found`)}
     }).catch((e)=>next({status: 404, message: `There was an error (${e.message})`}))
-
+    :
     Book.findAll().then((data)=>res.status(200).send(data))
     .catch((e)=>next(e))
 }
