@@ -24,11 +24,29 @@ const updateBookAvailability = (req, res, next)=>{
     .then((instance)=> {
         if(instance.available !== eval(available)){instance.available = available}
         else {throw new Error(`This book's availability status is already ${available}`)} 
-        
+
         return instance.save()
     })
     .then((updatedInstance)=> res.status(200).send({updatedInstance, message: "Changes saved successfully"}))
     .catch((e)=>next({status: 400, message: `There was an error (${e.message}), please try again.`}))
 }
 
-module.exports = {createBook, updateBookAvailability}
+const deleteBook = (req, res, next)=>{
+    const {id} = req.query
+
+    Book.findByPk(id)
+    .then((instance)=>{
+        if(instance){
+            let deletedInstance = {...instance.dataValues}
+            instance.destroy()
+            return deletedInstance
+        } else{
+            throw new Error(`Book id: ${id} not found`)
+        }
+        
+    })
+    .then((deletedInstance)=> res.status(200).send({deletedInstance, message: "Book removed from library successfully"}))
+    .catch((e)=>next({status: 400, message: `There was an error (${e.message}), please try again.`}))
+}
+
+module.exports = {createBook, updateBookAvailability, deleteBook}
