@@ -53,32 +53,46 @@ const readTransaction = (req, res, next)=>{
 
         Transaction.findAll({
             where: {...whereObj},
-        }).then((transaction)=>res.status(200).send(transaction))
+        }).then((transaction)=>{
+            transaction ? res.status(200).send(transaction) : (()=>{throw new Error(`Transaction not found`)})
+        })
+        .catch(e=>next(e))
     }else{
         Transaction.findAll()
         .then((data)=>res.status(200).send(data))
+        .catch(e=>next(e))
     }
     
 }
 
 const updateTransaction = (req, res, next)=>{
-    // const {id} = req.query;
-    // const {title, author, subject, year, available} = req.body;
+    const {id,bookId, userId} = req.query;
 
-    // Book.findByPk(id)
-    // .then((instance)=> {
-    //     if(instance){
-    //         instance.title = title ?? instance.title;
-    //         instance.author = author ?? instance.author;
-    //         instance.subject = subject ?? instance.subject;
-    //         instance.year = year ?? instance.year;
-    //         instance.available = available ?? instance.available;
-    //     }
-
-    //     return instance.save()
-    // })
-    // .then((updatedInstance)=> res.status(200).send({updatedInstance, message: "Changes saved successfully"}))
-    // .catch((e)=>next({status: 400, message: `There was an error (${e.message})`}))
+    if(id){
+        Transaction.findByPk(id).then((transaction)=>{
+            if(transaction){
+                transaction.status = 'closed';
+                transaction.save
+                res.status(200).send(transaction)
+            }else {
+                throw new Error(`Transaction id: ${id} not found`)
+            }
+        }).catch((e)=>next(e))
+    }else if(bookId && userId){
+        Transaction.findOne({
+            where: {bookId, userId, status: 'open'}
+        }).then((transaction)=>{
+            if(transaction){
+                transaction.status = 'closed';
+                transaction.save
+                res.status(200).send(transaction)
+            }else {
+                throw new Error('There is no transaction matching the criteria')
+            }
+        }).catch((e)=>next(e))
+    }else{next({status: 404, message: 'Empty params. Please include id or userId and bookId'})}
+    
+    
 }
 
 const deleteTransaction = (req, res, next)=>{
