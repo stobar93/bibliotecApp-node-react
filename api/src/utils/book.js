@@ -1,4 +1,4 @@
-const {Book} = require('../db')
+const {Book, Transaction} = require('../db')
 const { conn, Op } = require("../db.js");
 
 const createBook = (req, res, next)=>{
@@ -20,12 +20,14 @@ const createBook = (req, res, next)=>{
 const readBook = (req, res, next)=>{
     const {id} = req.query;
 
-    id ? Book.findByPk(id).then((instance)=>{
+    id ? Book.findByPk(id, {include: Transaction})
+    .then((instance)=>{
         if(instance) {res.status(200).send(instance)}
         else {throw new Error(`Book id: ${id} not found`)}
     }).catch((e)=>next({status: 404, message: `There was an error (${e.message})`}))
     :
-    Book.findAll().then((data)=>res.status(200).send(data))
+    Book.findAll({include: Transaction})
+    .then((data)=>res.status(200).send(data))
     .catch((e)=>next(e))
 }
 

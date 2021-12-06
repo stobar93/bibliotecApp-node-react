@@ -1,4 +1,4 @@
-const { User } = require('../db')
+const { User, Transaction } = require('../db')
 const { conn, Op } = require("../db.js");
 
 const createUser = (req, res, next)=>{
@@ -16,12 +16,15 @@ const createUser = (req, res, next)=>{
 const readUser = (req, res, next)=>{
     const {id} = req.query;
 
-    id ? User.findByPk(id).then((instance)=>{
+    id ? User.findByPk(id,{include:Transaction})
+    .then((instance)=>{
         if(instance) {res.status(200).send(instance)}
         else {throw new Error(`User id: ${id} not found`)}
-    }).catch((e)=>next({status: 404, message: `There was an error (${e.message})`}))
+    })
+    .catch((e)=>next({status: 404, message: `There was an error (${e.message})`}))
     :
-    User.findAll().then((data)=>res.status(200).send(data))
+    User.findAll({include: Transaction})
+    .then((data)=>res.status(200).send(data))
     .catch((e)=>next(e))
 }
 
