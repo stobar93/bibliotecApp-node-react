@@ -96,21 +96,21 @@ const updateTransaction = (req, res, next)=>{
 }
 
 const deleteTransaction = (req, res, next)=>{
-    // const {id} = req.query
+    const {id} = req.query
 
-    // Book.findByPk(id)
-    // .then((instance)=>{
-    //     if(instance){
-    //         let deletedInstance = {...instance.dataValues}
-    //         instance.destroy()
-    //         return deletedInstance
-    //     } else{
-    //         throw new Error(`Book id: ${id} not found`)
-    //     }
+    Transaction.findByPk(id)
+    .then((instance)=>{
+        if(instance){
+            let deletedTransaction = {...instance.dataValues}
+            instance.destroy()
+            return deletedTransaction
+        } else{
+            throw new Error(`Transaction id: ${id} not found`)
+        }
         
-    // })
-    // .then((deletedInstance)=> res.status(200).send({deletedInstance, message: "Book removed from library successfully"}))
-    // .catch((e)=>next({status: 400, message: `There was an error (${e.message})`}))
+    })
+    .then((deletedTransaction)=> res.status(200).send({deletedTransaction, message: "Transaction deleted successfully"}))
+    .catch((e)=>next({status: 400, message: `There was an error (${e.message})`}))
 }
 
 module.exports = {createTransaction, readTransaction, updateTransaction, deleteTransaction}
