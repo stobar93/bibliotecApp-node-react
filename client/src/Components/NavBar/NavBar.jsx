@@ -10,14 +10,14 @@ const links = ["Books", "Users", "Transactions"]
 export default function NavBar (){
     return (
         <>
-        <AppBar position="fixed" sx={{display: "flex", flexDirection:"row"}}>
-            <Typography
+        <AppBar position="fixed" sx={{display: "flex", flexDirection:"row", pl:'20px'}}>
+            {/* <Typography
             variant="h6"
             noWrap
             component="div"
           >
             Library 365
-          </Typography>
+          </Typography> */}
             <Toolbar disableGutters>
             {
                 links.map(link=>{
