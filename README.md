@@ -45,6 +45,9 @@ Dentro del repositorio, vaya a la ruta /api y cree un archivo con el nombre: .en
 Reemplace los valores de DB_USER (nombre de usuario de Postgres), DB_PASSWORD (contraseña de Postgres) y DB_NAME (nombre de la base de datos que creo recientemente)
 Guarde los cambios
 
+![image](https://user-images.githubusercontent.com/86356868/145015195-82e36c5b-071b-4c9b-b918-dd5bafa96653.png)
+
+
 ### 4. Iniciando la APP
 
 #### Para efectos de realizar pruebas, se creo un mockup de libros en la ruta:
