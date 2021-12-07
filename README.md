@@ -36,7 +36,7 @@ Bienvenido a BibliotecApp. Esta app tiene las siguientes funciones:
 ![image](https://user-images.githubusercontent.com/86356868/144994169-349ec703-71dc-42cd-b4e0-e75f659384b9.png)
 
   En un nuevo directorio en su equipo, inicie el interprete de comandos (Bash, PowerShell, etc) escriba el siguiente comando y presione ENTER:
-> git clone https://github.com/stobar93/node-react-library.git
+> git clone https://github.com/stobar93/bibliotecApp-node-react.git
 
 Abra el repositorio clonado en su editor de codigo preferido
 
