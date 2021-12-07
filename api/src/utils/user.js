@@ -1,16 +1,20 @@
-const { User, Transaction } = require('../db')
+const { User, Transaction, Book } = require('../db')
 const { conn, Op } = require("../db.js");
 
 const createUser = (req, res, next)=>{
-    const {id, firstName, lastName, status} = req.body;
+    const {id, firstName, lastName} = req.body;
+    if(id && firstName && lastName){
+        User.findOrCreate({
+            where: {id},
+            defaults: {firstName, lastName}
+        }).then((data)=>{
+            const [user, createdUser] = data;
+            createdUser ? res.status(200).send(user) : next({status:409, message: "The user is already registered"})
+        }).catch((e)=>{next({...e, message: `There was an error (${e.message})`})})
+    }else {
+        res.status(404).send("There's not enough information")
+    }
     
-    User.findOrCreate({
-        where: {id},
-        defaults: {firstName, lastName}
-    }).then((data)=>{
-        const [user, createdUser] = data;
-        createdUser ? res.status(200).send(user) : next({status:409, message: "The user is already registered"})
-    }).catch((e)=>{next({...e, message: `There was an error (${e.message})`})})
 }
 
 const readUser = (req, res, next)=>{
@@ -47,8 +51,34 @@ const updateUserInfo = (req, res, next)=>{
     .catch((e)=>next({status: 400, message: `There was an error (${e.message})`}))
 }
 
-const deleteUser = (req, res, next)=>{
+const deleteUser = async (req, res, next)=>{
     const {id} = req.query
+
+    //PUT all related transactions. Change status to 'closed'
+    Transaction.findAll({
+        where: {userId: id},
+    }).then((transactions)=>{
+        return transactions.map(transaction=>{
+            transaction.status = 'closed'
+            transaction.save()
+            return transaction.dataValues.bookId
+        })}
+        )
+    .then((bookIds)=>{//PUT all related books. Change available to 'yes'
+        return Book.findAll({
+            where: {
+                id: {
+                    [Op.in]: bookIds,
+                }
+            }
+        })
+    }).then(books=>{
+        return books.map(book=>{
+            book.available = 'yes',
+            book.save()
+        })
+    })
+    .catch(e=>next(e))
 
     User.findByPk(id)
     .then((instance)=>{

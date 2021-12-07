@@ -6,7 +6,8 @@ const createTransaction = (req, res, next)=>{
         const {userId, bookId} = req.body;
         
         //Valido que exista el usuario y que este activo
-        User.findByPk(userId)
+        if(userId && bookId){
+            User.findByPk(userId)
         .then((user)=>{
             if(user){
                 user.status === 'active' || (()=>{throw new Error(`User id: ${userId} status is ${user.status}`)})()
@@ -41,6 +42,10 @@ const createTransaction = (req, res, next)=>{
             )
         .then(()=>res.status(200).send('Success'))
         .catch((e)=>res.status(404).send(e.message))
+        } else {
+            res.status(404).send("There's not enough information")
+        }
+        
            
 }
 
@@ -72,7 +77,7 @@ const updateTransaction = (req, res, next)=>{
         Transaction.findByPk(id).then((transaction)=>{
             if(transaction){
                 transaction.status = 'closed';
-                transaction.save
+                transaction.save()
                 res.status(200).send(transaction)
             }else {
                 throw new Error(`Transaction id: ${id} not found`)
@@ -84,7 +89,7 @@ const updateTransaction = (req, res, next)=>{
         }).then((transaction)=>{
             if(transaction){
                 transaction.status = 'closed';
-                transaction.save
+                transaction.save()
                 res.status(200).send(transaction)
             }else {
                 throw new Error('There is no transaction matching the criteria')

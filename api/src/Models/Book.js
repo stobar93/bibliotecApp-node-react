@@ -60,7 +60,10 @@ module.exports = (sequelize) => {
         available: {
             type: DataTypes.BOOLEAN,
             defaultValue: true,
-            allowNull: false
+            allowNull: false,
+            get(){
+                return this.getDataValue('available') ? 'Yes' : 'No'
+            }
         },
         
     }, {timestamps: true})

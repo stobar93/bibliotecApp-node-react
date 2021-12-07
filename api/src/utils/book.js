@@ -4,8 +4,8 @@ const { conn, Op } = require("../db.js");
 const createBook = (req, res, next)=>{
     
         const {title, author, subject, year} = req.body;
-        
-        Book.findOrCreate({
+        if(title && author && subject && year){
+            Book.findOrCreate({
                 where:{title: {
                     [Op.iLike]: title
                 }},
@@ -14,7 +14,11 @@ const createBook = (req, res, next)=>{
                 const [book, createdBook] = data;
                 
                 createdBook ? res.status(200).send(book) : next({status:409, message: "The book is already registered. Only one unit of each book is allowed"})
-            }).catch((e)=>{next({...e, message: `There was an error (${e.message})`})})   
+            }).catch((e)=>{next({...e, message: `There was an error (${e.message})`})})
+        }else {
+            res.status(404).send("There's not enough information")
+        }
+           
 }
 
 const readBook = (req, res, next)=>{
@@ -26,7 +30,9 @@ const readBook = (req, res, next)=>{
         else {throw new Error(`Book id: ${id} not found`)}
     }).catch((e)=>next({status: 404, message: `There was an error (${e.message})`}))
     :
-    Book.findAll({include: Transaction})
+    Book.findAll({include: Transaction, order: [
+        ["id", "ASC"],
+      ],})
     .then((data)=>res.status(200).send(data))
     .catch((e)=>next(e))
 }
@@ -34,6 +40,14 @@ const readBook = (req, res, next)=>{
 const updateBook = (req, res, next)=>{
     const {id} = req.query;
     const {title, author, subject, year, available} = req.body;
+
+    if(available === 'yes'){
+        Transaction.findOne({
+            where: {
+                bookId: id
+            }
+        }).then((transaction)=>{transaction.status = 'closed', transaction.save()})
+    }
 
     Book.findByPk(id)
     .then((instance)=> {
@@ -44,7 +58,7 @@ const updateBook = (req, res, next)=>{
             instance.year = year ?? instance.year;
             instance.available = available ?? instance.available;
         }
-
+        
         return instance.save()
     })
     .then((updatedInstance)=> res.status(200).send({updatedInstance, message: "Changes saved successfully"}))
