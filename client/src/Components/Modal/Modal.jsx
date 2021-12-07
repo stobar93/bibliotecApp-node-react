@@ -17,6 +17,7 @@ export default function ModalDialog ({open, setOpen}){
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: "max-content",
+        maxWidth: "600px",
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -42,7 +43,7 @@ export default function ModalDialog ({open, setOpen}){
     const components = {
         successDialog: <Box sx={style.Box}>
             <IconButton sx={style.IconButton} onClick={handleClose}><CloseIcon /></IconButton>
-            <Typography sx={style.Typography} id="modal-modal-title" variant="h3" component="h2">
+            <Typography sx={style.Typography} id="modal-modal-title" variant="h3" component="body1">
               {open.message}
             </Typography>
             <Button sx={style.Button} variant='contained' onClick={()=>setOpen(prev=>{return {status: false}})}>OK</Button>
