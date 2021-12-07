@@ -1,4 +1,4 @@
-# BibliotecApp (node-react-library)
+# BibliotecApp (bibliotecApp-node-react)
 
 Hola!
 
