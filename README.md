@@ -145,10 +145,12 @@ Esta transaccion queda en estado 'open' hasta cuando el usuario retorne el libro
 
 #### Prestar un libro
 Se debe registrar el ID del libro a prestar y del usuario que se solicita el libro
+
 ![image](https://user-images.githubusercontent.com/86356868/145005342-0e8aecc7-2aa6-4a1a-8ddb-a16b9b5ed7f5.png)
 
 #### Retornar un libro
 Se debe registrar el ID del libro retornado y del usuario que lo tenia en prestamo
+
 ![image](https://user-images.githubusercontent.com/86356868/145005405-c911427a-5646-418f-b97f-3e2869e150d4.png)
 
 ### Manejo de errores
@@ -174,21 +176,25 @@ Responde con la lista completa de libros disponibles en la base de datos
 
 ### http://localhost:3001/book?id=1
 Permite buscar por id del libro cuando se envia por req.query
+
 ![image](https://user-images.githubusercontent.com/86356868/145007126-a427446b-f1a3-4668-968d-cd19c5fe9aa3.png)
 
 ## BOOK - POST
 ### http://localhost:3001/book
 Para crear un libro se debe enviar la informacion completa por req.body. Todos los campos son STRING, excepto el año del libro que debe ser INTEGER
+
 ![image](https://user-images.githubusercontent.com/86356868/145007688-e5640be4-9105-4109-ac94-9ef31b9e26a3.png)
 
 ## BOOK - PUT
 ### http://localhost:3001/book?id=34
 Para modificar un registro de un libro. Se envia el id del libro por req.query y los campos a ser modificados se envian por req.body. Puede ser un solo campo o todos, excepto por el id y los timestamps
+
 ![image](https://user-images.githubusercontent.com/86356868/145008514-4ea69b0e-6b89-4395-9532-6226e18ee07a.png)
 
 ## BOOK - DELETE
 ### http://localhost:3001/book?id=34
 Para eliminar un libro solamente se debe enviar el request con el id del libro por req.query
+
 ![image](https://user-images.githubusercontent.com/86356868/145008862-46574595-516f-4e85-9304-3a07f394d0a6.png)
 
 
