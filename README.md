@@ -197,6 +197,39 @@ Para eliminar un libro solamente se debe enviar el request con el id del libro p
 
 ![image](https://user-images.githubusercontent.com/86356868/145008862-46574595-516f-4e85-9304-3a07f394d0a6.png)
 
+## USER - GET
+### http://localhost:3001/user
+### http://localhost:3001/user?id=1234
+Para obtener un usuario se envia el id por req.query. Si no se envia el id, retorna todos los usuarios de la base de datos
+
+## USER - POST
+### http://localhost:3001/user
+Para crear un usuario en la base de datos se debe enviar la informacion por req.body de la siguiente manera:
+
+```
+req.body = {
+  "id": 1234,
+  "firstName": "Sebastian",
+  "lastName": "Tobar"
+}
+```
+
+## USER - PUT
+### http://localhost:3001/user?id=1234
+Para modificar un usuario se debe enviar el id del usuario por req.query y la informacion a modificar por req.body. Puede ser uno o todos los parametros.
+A continuacion un ejemplo de un req.body con todos los posibles atributos a modificar:
+
+```
+req.body = {
+  "status": "banned", //Otra opcion "active"
+  "firstName": "Sebas",
+  "lastName": "T"
+}
+```
+
+## USER - DELETE
+### http://localhost:3001/user?id=1234
+Para eliminar de la base de datos a un usuario se debe enviar solamente el id del usuario por req.query
 
 
 
